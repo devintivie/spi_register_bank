@@ -58,10 +58,11 @@ wire MISO_a;          //OUTPUT HOLDER FOR MISO
 wire spi_rx_command_a;
 wire [(SPIAddrSize-1):0] spi_rx_addr_a;
 reg [(SPIAddrSize-1):0] dpr_address_a;
-reg [15:0] dpr_data_in_a;
-reg dpr_enable_a_reg, dpr_enable_a_next;        
+//reg [15:0] dpr_data_in_a;
+//reg dpr_enable_a_reg;
+//reg dpr_enable_a_next;        
 
-reg [0:0] dpr_write_enable_reg_a;
+//reg [0:0] dpr_write_enable_reg_a;
 wire dpr_write_enable_a;  
 
 wire read_write_data_complete_a;                 //SUCCESSFULLY READ FROM MASTER(WRITE_DATA) OR WRITE TO MASTER(READ_DATA)
@@ -72,14 +73,25 @@ reg [15:0] spi_data_out_a;            //miso output
 
 integer i;
 localparam  STRING_DATA_BASE1 = 12'h000,
-            STRING_DATA_END1 =  12'h0ff;  
+            STRING_DATA_END1 =  12'h0ff,
+            STRING_DATA_BASE2 = 12'h100,    
+            STRING_DATA_END2 = 12'h1ff;    
 
-//STRING MODULE VARIABLES
-reg [(StringModuleAddrSize-1):0] string_module_address;
-reg [0:0] string_module_write_enable_a_reg, string_module_write_enable_a_next;
-wire [15:0] string_module_data_out;
+//STRING MODULE 1 VARIABLES
+reg [(StringModuleAddrSize-1):0] string_module1_address;
+reg [0:0] string_module1_write_enable_reg, string_module1_write_enable_next;
+wire [15:0] string_module1_data_out;
+reg string_module1_enable_reg, string_module1_enable_next;
+reg [15:0] string_module1_data_in;
 
-//SPI SLAVE PI #1
+//STRING MODULE 2 VARIABLES
+reg [(StringModuleAddrSize-1):0] string_module2_address;
+reg [0:0] string_module2_write_enable_reg, string_module2_write_enable_next;
+wire [15:0] string_module2_data_out;
+reg string_module2_enable_reg, string_module2_enable_next;
+reg [15:0] string_module2_data_in;
+
+//SPI SLAVE INTERFACE A
 SPI_slave 
 #(
 .MsgBitCount(MsgBitCount), 
@@ -121,68 +133,122 @@ test_string_module
 #(
 .AddrSize(StringModuleAddrSize)
 )
-string_module_inst
+string_module_inst1
 (
     .clk(clk),               //in
-    .ena(dpr_enable_a_reg),          //in
-    .wea(string_module_write_enable_a_reg),     //in
-    .spi_addr(string_module_address),           //in
-    .dina(dpr_data_in_a),             //in
-    .douta(string_module_data_out)           //out  
+    .ena(string_module1_enable_reg),          //in
+    .wea(string_module1_write_enable_reg),     //in
+    .spi_addr(string_module1_address),           //in
+    .dina(string_module1_data_in),             //in
+    .douta(string_module1_data_out)           //out  
+);
+
+test_string_module 
+#(
+.AddrSize(StringModuleAddrSize)
+)
+string_module_inst2
+(
+    .clk(clk),               //in
+    .ena(string_module2_enable_reg),          //in
+    .wea(string_module2_write_enable_reg),     //in
+    .spi_addr(string_module2_address),           //in
+    .dina(string_module2_data_in),             //in
+    .douta(string_module2_data_out)           //out  
 );
 
 
 
-
-//SPI INPUT LOGIC UPDATE
-//For writing
+//SYNC SHARED REGISTERS
 always @(posedge clk)
 begin
     ID_reg <= PROGRAM_ID;
     VERSION_reg <= {VERSION_LARGE, VERSION_SMALL};
-    
+
     //Set flat register space address
     dpr_address_a <= spi_rx_addr_a;
-    
-    //Set string module address
-    string_module_address <= spi_rx_addr_a - STRING_DATA_BASE1;
-    
-    //spi data to dps control
-    dpr_data_in_a <= spi_write_data_a;
-    
-    //sync dpr enables from controller
-    dpr_enable_a_reg <= dpr_enable_a_next;
-    dpr_write_enable_reg_a <= dpr_write_enable_a; 
-    
-    //sync string module write enable
-    string_module_write_enable_a_reg <= string_module_write_enable_a_next;
 end
 
-//SPI INPUT ASYNC CONTROL
-//For writing
-always@*
-begin
-    string_module_write_enable_a_next = dpr_write_enable_a;
-    dpr_enable_a_next = dpr_enable_a;
-end
+////UPDATE SHARED REGISTERS
+//always @*
+//begin
+//    dpr_enable_a_next = dpr_enable_a;
+//end
 
 
-
-//REGISTERS LOGIC UPDATE
-//For reading
+//MODULE 1 SYNC
+//For writing from spi interface to module 1
 always @(posedge clk)
 begin
-//    for(i = 0; i < STRING_DATA_COUNT; i = i + 1)
-//    begin
-//        string_data_reg[i] <= string_data_next[i];
-//    end
+    //Set string module address
+    string_module1_address <= spi_rx_addr_a - STRING_DATA_BASE1;
+    //spi data to dps control
+    string_module1_data_in <= spi_write_data_a;
+    //sync dpr enables from controller
+    string_module1_enable_reg <= string_module1_enable_next;
+    //sync string module write enable
+    string_module1_write_enable_reg <= string_module1_write_enable_next;
+end
+
+//MODULE 1 ASYNC CONTROL
+//For writing from spi interface a
+always@*
+begin
+    string_module1_write_enable_next = 1'b0;
+    string_module1_enable_next = 1'b0;
     
-    //check spi address
-    //if address is in string module then access from within module
-    if(spi_rx_addr_a >= STRING_DATA_BASE1 && spi_rx_addr_a <=STRING_DATA_END1)
+    if(spi_rx_addr_a >= STRING_DATA_BASE1 && spi_rx_addr_a <= STRING_DATA_END1)
     begin
-        //Set data output from module
-        spi_data_out_a = string_module_data_out;
+        string_module1_write_enable_next = dpr_write_enable_a;
+        string_module1_enable_next = dpr_enable_a;
+    end
+
+    
+end
+
+//MODULE 2 SYNC
+//For writing from spi interface to module 2
+always @(posedge clk)
+begin
+    //Set string module address
+    string_module2_address <= spi_rx_addr_a - STRING_DATA_BASE2;
+    //spi data to dps control
+    string_module2_data_in <= spi_write_data_a;
+    
+    //sync dpr enables from controller
+    string_module2_enable_reg <= string_module2_enable_next;    
+    //sync string module write enable
+    string_module2_write_enable_reg <= string_module2_write_enable_next;
+end
+
+//MODULE 2 ASYNC CONTROL
+//For writing from spi interface a
+always@*
+begin
+    string_module2_write_enable_next = 1'b0;
+    string_module2_enable_next = 1'b0;
+    
+    if(spi_rx_addr_a >= STRING_DATA_BASE2 && spi_rx_addr_a <= STRING_DATA_END2)
+    begin
+        string_module2_write_enable_next = dpr_write_enable_a;
+        string_module2_enable_next = dpr_enable_a;
+    end
+end
+
+//REGISTERS LOGIC UPDATE
+//For reading out to spi interface a
+always @(posedge clk)
+begin
+    //if address is in string module then access from within module
+    if(spi_rx_addr_a >= STRING_DATA_BASE1 && spi_rx_addr_a <= STRING_DATA_END1)
+    begin
+        //Set data output from module 1
+        spi_data_out_a = string_module1_data_out;
+    end
+    else if(spi_rx_addr_a >= STRING_DATA_BASE2 && spi_rx_addr_a <= STRING_DATA_END2)
+    begin
+        //Set data output from module 2
+        spi_data_out_a = string_module2_data_out;
     end
     else
     //if address is in config space then get config registers

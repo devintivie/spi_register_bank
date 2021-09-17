@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date         : Fri Sep 17 10:36:44 2021
+| Date         : Fri Sep 17 12:14:50 2021
 | Host         : DESKTOP-7S00QLE running 64-bit major release  (build 9200)
 | Command      : report_drc -file spi_register_bank_top_drc_opted.rpt -pb spi_register_bank_top_drc_opted.pb -rpx spi_register_bank_top_drc_opted.rpx
 | Design       : spi_register_bank_top

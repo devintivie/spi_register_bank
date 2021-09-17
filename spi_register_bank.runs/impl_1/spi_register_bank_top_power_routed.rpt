@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date             : Fri Sep 17 10:37:02 2021
+| Date             : Fri Sep 17 12:15:09 2021
 | Host             : DESKTOP-7S00QLE running 64-bit major release  (build 9200)
 | Command          : report_power -file spi_register_bank_top_power_routed.rpt -pb spi_register_bank_top_power_summary_routed.pb -rpx spi_register_bank_top_power_routed.rpx
 | Design           : spi_register_bank_top
@@ -53,12 +53,12 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |      210 |       --- |             --- |
-|   LUT as Logic |    <0.001 |       56 |     20800 |            0.27 |
-|   Register     |    <0.001 |      132 |     41600 |            0.32 |
-|   Others       |     0.000 |       11 |       --- |             --- |
-| Signals        |    <0.001 |      176 |       --- |             --- |
-| Block RAM      |    <0.001 |      0.5 |        50 |            1.00 |
+| Slice Logic    |    <0.001 |      233 |       --- |             --- |
+|   LUT as Logic |    <0.001 |       55 |     20800 |            0.26 |
+|   Register     |    <0.001 |      150 |     41600 |            0.36 |
+|   Others       |     0.000 |       16 |       --- |             --- |
+| Signals        |    <0.001 |      212 |       --- |             --- |
+| Block RAM      |    <0.001 |        1 |        50 |            2.00 |
 | I/O            |    <0.001 |        5 |       210 |            2.38 |
 | Static Power   |     0.062 |          |           |                 |
 | Total          |     0.063 |          |           |                 |
@@ -137,10 +137,8 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+-----------------------+-----------+
-| Name                  | Power (W) |
-+-----------------------+-----------+
-| spi_register_bank_top |     0.001 |
-+-----------------------+-----------+
++------+-----------+
+| Name | Power (W) |
++------+-----------+
 
 

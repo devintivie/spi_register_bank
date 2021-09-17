@@ -2,8 +2,8 @@
 # Vivado v2020.1 (64-bit)
 # SW Build 2902540 on Wed May 27 19:54:49 MDT 2020
 # IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
-# Start of session at: Fri Sep 17 10:36:25 2021
-# Process ID: 14388
+# Start of session at: Fri Sep 17 12:14:32 2021
+# Process ID: 49072
 # Current directory: C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.runs/impl_1
 # Command line: vivado.exe -log spi_register_bank_top.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source spi_register_bank_top.tcl -notrace
 # Log file: C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.runs/impl_1/spi_register_bank_top.vdi

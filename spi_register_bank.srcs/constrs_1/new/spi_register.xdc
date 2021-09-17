@@ -163,10 +163,10 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { c
 #set_property -dict { PACKAGE_PIN A3    IOSTANDARD LVCMOS33 } [get_ports { ck_a11 }]; #IO_L8N_T1_AD14N_35 Sch=ad_n[14]
 
 ## ChipKit SPI
-set_property -dict { PACKAGE_PIN G1    IOSTANDARD LVCMOS33 } [get_ports { MISO_out }]; #IO_L17N_T2_35 Sch=ck_miso
-set_property -dict { PACKAGE_PIN H1    IOSTANDARD LVCMOS33 } [get_ports { MOSI }]; #IO_L17P_T2_35 Sch=ck_mosi
-set_property -dict { PACKAGE_PIN F1    IOSTANDARD LVCMOS33 } [get_ports { SCK }]; #IO_L18P_T2_35 Sch=ck_sck
-set_property -dict { PACKAGE_PIN C1    IOSTANDARD LVCMOS33 } [get_ports { SSEL }]; #IO_L16N_T2_35 Sch=ck_ss
+set_property -dict { PACKAGE_PIN G1    IOSTANDARD LVCMOS33 } [get_ports { MISO_a_out }]; #IO_L17N_T2_35 Sch=ck_miso
+set_property -dict { PACKAGE_PIN H1    IOSTANDARD LVCMOS33 } [get_ports { MOSI_a }]; #IO_L17P_T2_35 Sch=ck_mosi
+set_property -dict { PACKAGE_PIN F1    IOSTANDARD LVCMOS33 } [get_ports { SCK_a }]; #IO_L18P_T2_35 Sch=ck_sck
+set_property -dict { PACKAGE_PIN C1    IOSTANDARD LVCMOS33 } [get_ports { SSEL_a }]; #IO_L16N_T2_35 Sch=ck_ss
 ## ChipKit I2C
 #set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { ck_scl }]; #IO_L4P_T0_D04_14 Sch=ck_scl
 #set_property -dict { PACKAGE_PIN M18   IOSTANDARD LVCMOS33 } [get_ports { ck_sda }]; #IO_L4N_T0_D05_14 Sch=ck_sda

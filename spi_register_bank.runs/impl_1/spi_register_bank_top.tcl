@@ -121,7 +121,7 @@ start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  set_param chipscope.maxJobs 2
+  set_param chipscope.maxJobs 5
   set_param xicom.use_bs_reader 1
 OPTRACE "create in-memory project" START { }
   create_project -in_memory -part xc7a35ticsg324-1L
@@ -134,9 +134,11 @@ OPTRACE "set parameters" START { }
   set_property parent.project_path C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.xpr [current_project]
   set_property ip_output_repo C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.runs/synth_1/spi_register_bank_top.dcp
+  read_ip -quiet c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/constrs_1/new/spi_register.xdc
 OPTRACE "read constraints: implementation" END { }
@@ -303,6 +305,7 @@ set rc [catch {
   create_msg_db write_bitstream.pb
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
   catch { write_mem_info -force spi_register_bank_top.mmi }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }

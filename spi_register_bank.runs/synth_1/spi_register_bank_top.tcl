@@ -70,7 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 2
+set_param chipscope.maxJobs 5
 set_param xicom.use_bs_reader 1
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35ticsg324-1L
@@ -78,8 +78,10 @@ create_project -in_memory -part xc7a35ticsg324-1L
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
+set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
 set_property webtalk.parent_dir C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.cache/wt [current_project]
 set_property parent.project_path C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.xpr [current_project]
+set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property board_part digilentinc.com:arty:part0:1.1 [current_project]
@@ -87,11 +89,16 @@ set_property ip_output_repo c:/Users/devin/Workspaces/VivadoWorkspace/spi_regist
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
+add_files c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/test_coe.coe
 read_verilog -library xil_defaultlib {
   C:/Users/devin/Workspaces/VivadoWorkspace/SharedVivado/DualPortRamCtrl.v
   C:/Users/devin/Workspaces/VivadoWorkspace/SharedVivado/SPI_slave.v
+  C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/new/test_string_module.v
   C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/new/spi_register_bank_top.v
 }
+read_ip -quiet c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
+set_property used_in_implementation false [get_files -all c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem_ooc.xdc]
+
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the

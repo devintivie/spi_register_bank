@@ -138,7 +138,7 @@ OPTRACE "set parameters" START { }
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.runs/synth_1/spi_register_bank_top.dcp
-  read_ip -quiet c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
+  read_ip -quiet C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/constrs_1/new/spi_register.xdc
 OPTRACE "read constraints: implementation" END { }
@@ -309,7 +309,7 @@ OPTRACE "read constraints: write_bitstream" END { }
   catch { write_mem_info -force spi_register_bank_top.mmi }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }
-  write_bitstream -force spi_register_bank_top.bit 
+  write_bitstream -force spi_register_bank_top.bit -bin_file
 OPTRACE "write_bitstream" END { }
 OPTRACE "write_bitstream misc" START { }
 OPTRACE "read constraints: write_bitstream_post" START { }

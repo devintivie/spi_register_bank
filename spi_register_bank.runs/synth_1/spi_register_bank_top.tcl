@@ -89,14 +89,14 @@ set_property ip_output_repo c:/Users/devin/Workspaces/VivadoWorkspace/spi_regist
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-add_files c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/test_coe.coe
+add_files C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/test_coe.coe
 read_verilog -library xil_defaultlib {
   C:/Users/devin/Workspaces/VivadoWorkspace/SharedVivado/DualPortRamCtrl.v
   C:/Users/devin/Workspaces/VivadoWorkspace/SharedVivado/SPI_slave.v
   C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/new/test_string_module.v
   C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/new/spi_register_bank_top.v
 }
-read_ip -quiet c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
+read_ip -quiet C:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem.xci
 set_property used_in_implementation false [get_files -all c:/Users/devin/Workspaces/VivadoWorkspace/spi_register_bank/spi_register_bank.srcs/sources_1/ip/string_module_blk_mem/string_module_blk_mem_ooc.xdc]
 
 OPTRACE "Adding files" END { }

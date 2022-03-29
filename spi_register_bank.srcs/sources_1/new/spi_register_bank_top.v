@@ -93,7 +93,9 @@ integer i;
 localparam  STRING_DATA_BASE1 = 12'h000,
             STRING_DATA_END1 =  12'h0ff,
             STRING_DATA_BASE2 = 12'h100,    
-            STRING_DATA_END2 = 12'h1ff;    
+            STRING_DATA_END2 = 12'h1ff,
+            STRING_DATA_BASE3 = 12'h200,    
+            STRING_DATA_END3 = 12'h2ff;      
 
 //STRING MODULE 1 VARIABLES
 reg [(StringModuleAddrSize-1):0] string_module1_address_reg, string_module1_address_next;
@@ -108,6 +110,13 @@ reg [0:0] string_module2_write_enable_reg, string_module2_write_enable_next;
 wire [15:0] string_module2_data_out;
 reg string_module2_enable_reg, string_module2_enable_next;
 reg [15:0] string_module2_data_in_reg, string_module2_data_in_next;
+
+//STRING MODULE 3 (SHARED) VARIABLES
+reg [(StringModuleAddrSize-1):0] string_module3_address_reg, string_module3_address_next;
+reg [0:0] string_module3_write_enable_reg, string_module3_write_enable_next;
+wire [15:0] string_module3_data_out;
+reg string_module3_enable_reg, string_module3_enable_next;
+reg [15:0] string_module3_data_in_reg, string_module3_data_in_next;
 
 
 //SPI SLAVE INTERFACE A
@@ -217,6 +226,21 @@ string_module_inst2
     .douta(string_module2_data_out)           //out  
 );
 
+//MODULE 3
+test_string_module 
+#(
+.AddrSize(StringModuleAddrSize)
+)
+string_module_inst3
+(
+    .clk(clk),               //in
+    .ena(string_module3_enable_reg),          //in
+    .wea(string_module3_write_enable_reg),     //in
+    .spi_addr(string_module3_address_reg),           //in
+    .dina(string_module3_data_in_reg),             //in
+    .douta(string_module3_data_out)           //out  
+);
+
 
 
 //SYNC SHARED REGISTERS
@@ -271,6 +295,20 @@ begin
     string_module2_address_reg <= string_module2_address_next;
     //spi data to dps control
     string_module2_data_in_reg <= string_module2_data_in_next;
+end
+
+//MODULE 3 SYNC
+//For writing from spi interface to module 2
+always @(posedge clk)
+begin
+    //sync string module write enable
+    string_module3_write_enable_reg <= string_module3_write_enable_next;
+    //sync dpr enables from controller
+    string_module3_enable_reg <= string_module3_enable_next;    
+    //Set string module address
+    string_module3_address_reg <= string_module3_address_next;
+    //spi data to dps control
+    string_module3_data_in_reg <= string_module3_data_in_next;
 end
 
 //MODULE 1 ASYNC CONTROL
@@ -331,6 +369,37 @@ begin
             string_module2_enable_next = dpr_enable_a;
             string_module2_address_next = dpr_address_a - STRING_DATA_BASE2;
             string_module2_data_in_next = spi_write_data_a;
+        end
+    end
+end
+
+//MODULE 3 ASYNC CONTROL
+//For writing from any spi interface
+always@*
+begin
+    string_module3_write_enable_next = 1'b0;
+    string_module3_enable_next = 1'b0;
+    string_module3_address_next = string_module3_address_reg;
+    string_module3_data_in_next = string_module3_data_in_reg;
+    
+    if(dpr_enable_b)
+    begin
+        if(dpr_address_b >= STRING_DATA_BASE3 && dpr_address_b <= STRING_DATA_END3)
+        begin
+            string_module3_write_enable_next = dpr_write_enable_b;
+            string_module3_enable_next = dpr_enable_b;
+            string_module3_address_next = dpr_address_b;
+            string_module3_data_in_next = spi_write_data_b;
+        end
+    end
+    else if(dpr_enable_a)
+    begin
+        if(dpr_address_a >= STRING_DATA_BASE3 && dpr_address_a <= STRING_DATA_END3)
+        begin
+            string_module3_write_enable_next = dpr_write_enable_a;
+            string_module3_enable_next = dpr_enable_a;
+            string_module3_address_next = dpr_address_a;
+            string_module3_data_in_next = spi_write_data_a;
         end
     end
 end
